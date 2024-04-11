@@ -1,6 +1,6 @@
 FROM fuzzer_base/afl as afl
 FROM fuzzer_base/aflfast as aflfast
-FROM fuzzer_base/angora as angora
+#FROM fuzzer_base/angora as angora
 FROM fuzzer_base/fairfuzz as fairfuzz
 FROM fuzzer_base/lafintel as lafintel
 FROM fuzzer_base/learnafl as learnafl
@@ -10,14 +10,14 @@ FROM fuzzer_base/radamsa as radamsa
 FROM fuzzer_base/redqueen as redqueen
 
 FROM autofz_bench/afl as bench_afl
-FROM autofz_bench/angora as bench_angora
+#FROM autofz_bench/angora as bench_angora
 FROM autofz_bench/lafintel as bench_lafintel
 FROM autofz_bench/libfuzzer as bench_libfuzzer
 FROM autofz_bench/radamsa as bench_radamsa
 FROM autofz_bench/redqueen as bench_redqueen
 FROM autofz_bench/coverage as bench_coverage
 
-FROM ubuntu:16.04
+#FROM ubuntu:16.04
 
 ARG USER
 ARG UID
@@ -32,19 +32,19 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 # install proper tools
 RUN apt-get update && \
-    apt-get install -y vim tmux nano htop autoconf automake build-essential libtool cmake git sudo software-properties-common gperf libselinux1-dev  bison texinfo flex zlib1g-dev libexpat1-dev libmpg123-dev wget curl python3-pip python-pip unzip pkg-config clang llvm-dev apt-transport-https ca-certificates libc++-dev gcc-5-plugin-dev zip tree re2c bison libtool
+    apt-get install -y vim tmux nano htop autoconf automake build-essential libtool cmake git sudo software-properties-common gperf libselinux1-dev  bison texinfo flex zlib1g-dev libexpat1-dev libmpg123-dev wget curl python3-pip unzip pkg-config clang llvm-dev apt-transport-https ca-certificates libc++-dev gcc-11-plugin-dev zip tree re2c bison libtool
 
 # QSYM Part ! it alters /usr/local, so we build it here
-RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2
+#RUN curl -fsSL -o- https://bootstrap.pypa.io/pip/2.7/get-pip.py | python2
+#
+#RUN git clone --depth 1  https://github.com/fuyu0425/qsym /fuzzer/qsym
+#
+#WORKDIR /fuzzer/qsym
+#RUN sed -i '23,25 s/^/#/' setup.py && sed -i '4,7 s/^/#/' setup.sh && \
+#    ./setup.sh && pip2 install .
+#
 
-RUN git clone --depth 1  https://github.com/fuyu0425/qsym /fuzzer/qsym
-
-WORKDIR /fuzzer/qsym
-RUN sed -i '23,25 s/^/#/' setup.py && sed -i '4,7 s/^/#/' setup.sh && \
-    ./setup.sh && pip2 install .
-
-
-RUN apt-get install -y git build-essential wget zlib1g-dev golang-go python-pip python-dev build-essential cmake
+RUN apt-get install -y git build-essential wget zlib1g-dev golang-go python-pip python3-dev build-essential cmake
 
 # lava
 RUN apt install -y libglib2.0-dev gtk-doc-tools libtiff-dev libpng-dev \
@@ -55,7 +55,7 @@ RUN apt install -y golang libarchive-dev libpng-dev ragel gtk-doc-tools libfreet
   binutils-dev libgcrypt20-dev libdbus-glib-1-dev libgirepository1.0-dev libgss-dev bzip2 libbz2-dev libc-ares-dev libfreetype6-dev libglib2.0-dev \
   libssh-dev libssl-dev libxml2-dev libturbojpeg nasm liblzma-dev subversion
 
-RUN apt-get install -y zip autoconf automake libtool bison re2c pkg-config flex bison dbus-cpp-dev
+RUN apt-get install -y zip autoconf automake libtool bison re2c pkg-config flex bison libdbus-c++-dev
 
 RUN sudo apt install -y libunwind-dev
 
@@ -68,16 +68,16 @@ RUN apt install -y make autoconf automake libtool shtool
 # Fuzzbench
 RUN apt install -y ninja-build wget cmake
 
-RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc/apt/sources.list && \
-  echo "deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc/apt/sources.list && \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 15CF4D18AF4F7421 && \
-  apt update && \
-    apt-get install -y clang-12 llvm-12-dev lld-12 lld-12 clangd-12 lldb-12 libc++1-12 libc++-12-dev libc++abi-12-dev && \
-  update-alternatives --install /usr/bin/clang clang /usr/bin/clang-12 100 && \
-  update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-12 100 && \
-  update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-12 100 && \
-  update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-12 100 && \
-  update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-12 100
+#RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc/apt/sources.list && \
+#  echo "deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc/apt/sources.list && \
+#  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 15CF4D18AF4F7421 && \
+RUN  apt update && \
+    apt-get install -y clang-13 llvm-13-dev lld-13 lld-13 clangd-13 lldb-13 libc++1-13 libc++-13-dev libc++abi-13-dev && \
+  update-alternatives --install /usr/bin/clang clang /usr/bin/clang-13 100 && \
+  update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-13 100 && \
+  update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-13 100 && \
+  update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-13 100 && \
+  update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-13 100
 
 
 # # RUN mkdir /llvm && \
@@ -87,12 +87,12 @@ RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-12 main" >> /etc
 
 RUN mkdir /llvm && \
     cd /llvm && \
-    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0/llvm-12.0.0.src.tar.xz -O llvm.tar.xz && tar xf llvm.tar.xz && \
-    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-12.0.0/compiler-rt-12.0.0.src.tar.xz -O compiler-rt.tar.xz && tar xf compiler-rt.tar.xz
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.1/llvm-13.0.1.src.tar.xz -O llvm.tar.xz && tar xf llvm.tar.xz && \
+    wget https://github.com/llvm/llvm-project/releases/download/llvmorg-13.0.1/compiler-rt-13.0.1.src.tar.xz -O compiler-rt.tar.xz && tar xf compiler-rt.tar.xz
 
 COPY --chown=$UID:$GID --from=afl /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=aflfast /fuzzer /fuzzer
-COPY --chown=$UID:$GID --from=angora /fuzzer /fuzzer
+#COPY --chown=$UID:$GID --from=angora /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=fairfuzz /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=lafintel /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=learnafl /fuzzer /fuzzer
@@ -102,7 +102,7 @@ COPY --chown=$UID:$GID --from=radamsa /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=redqueen /fuzzer /fuzzer
 
 COPY --chown=$UID:$GID --from=bench_afl /d /d
-COPY --chown=$UID:$GID --from=bench_angora /d /d
+#COPY --chown=$UID:$GID --from=bench_angora /d /d
 COPY --chown=$UID:$GID --from=bench_lafintel /d /d
 COPY --chown=$UID:$GID --from=bench_radamsa /d /d
 COPY --chown=$UID:$GID --from=bench_redqueen /d /d
@@ -111,10 +111,10 @@ COPY --chown=$UID:$GID --from=bench_afl /seeds /seeds
 
 COPY --chown=$UID:$GID --from=bench_libfuzzer /d /d
 
-COPY --chown=$UID:$GID --from=bench_coverage /d /d
+COPY --chown=$UID:$GID --from=autofz_bench/coverage:latest /d /d
 
 # Used to calculate coverage. We need source code
-COPY --chown=$UID:$GID --from=bench_coverage /autofz_bench /autofz_bench
+COPY --chown=$UID:$GID --from=autofz_bench/coverage:latest /autofz_bench /autofz_bench
 
 USER root
 RUN cp /fuzzer/LearnAFL/learning_engine.py /usr/local/bin

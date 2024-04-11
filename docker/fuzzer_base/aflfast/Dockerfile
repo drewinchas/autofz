@@ -5,7 +5,7 @@ WORKDIR /fuzzer
 
 RUN git clone https://github.com/mboehme/aflfast && \
     cd aflfast && \
-    make && make install
+    AFL_NO_X86=1 make && AFL_NO_X86=1 make install
 
 ENV CC=afl-gcc \
     CXX=afl-g++

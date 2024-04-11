@@ -49,7 +49,7 @@ do
         CXXFLAGS="$CFLAGS -stdlib=libc++"
         FUZZING_ENGINE=afl
         AFL_SRC=/fuzzer/afl
-        LIBFUZZER_SRC=/llvm/compiler-rt-12.0.0.src/lib/fuzzer/
+        LIBFUZZER_SRC=/llvm/compiler-rt-17.0.6.src/lib/fuzzer/
         export CC CXX CFLAGS CXXFLAGS FUZZING_ENGINE AFL_SRC LIBFUZZER_SRC
         BUILD_SCRIPT=$FTS_DIR/$target/build.sh
         RUNDIR="$target"
@@ -74,7 +74,7 @@ do
         CXXFLAGS="$CFLAGS -stdlib=libc++"
         FUZZING_ENGINE=afl
         AFL_SRC=/fuzzer/afl
-        LIBFUZZER_SRC=/llvm/compiler-rt-12.0.0.src/lib/fuzzer/
+        LIBFUZZER_SRC=/llvm/compiler-rt-17.0.6.src/lib/fuzzer/
         export CC CXX CFLAGS CXXFLAGS FUZZING_ENGINE AFL_SRC LIBFUZZER_SRC
         BUILD_SCRIPT=$FTS_DIR/$target/build.sh
         RUNDIR="$target"
@@ -98,7 +98,7 @@ do
         CXXFLAGS="$CFLAGS -stdlib=libc++"
         FUZZING_ENGINE=coverage
         AFL_SRC=/fuzzer/afl
-        LIBFUZZER_SRC=/llvm/compiler-rt-12.0.0.src/lib/fuzzer/
+        LIBFUZZER_SRC=/llvm/compiler-rt-17.0.6.src/lib/fuzzer/
         export CC CXX CFLAGS CXXFLAGS FUZZING_ENGINE AFL_SRC LIBFUZZER_SRC
         BUILD_SCRIPT=$FTS_DIR/$target/build.sh
         RUNDIR="$target"
@@ -132,7 +132,7 @@ do
         CXXFLAGS="$CFLAGS -stdlib=libc++"
         FUZZING_ENGINE=coverage
         AFL_SRC=/fuzzer/afl
-        LIBFUZZER_SRC=/llvm/compiler-rt-12.0.0.src/lib/fuzzer/
+        LIBFUZZER_SRC=/llvm/compiler-rt-17.0.6.src/lib/fuzzer/
         export CC CXX CFLAGS CXXFLAGS FUZZING_ENGINE AFL_SRC LIBFUZZER_SRC
         BUILD_SCRIPT=$FTS_DIR/$target/build.sh
         RUNDIR="$target"

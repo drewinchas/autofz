@@ -30,6 +30,7 @@ if [ -e $SCRIPT_DIR/Dockerfile ]; then
             -t autofz \
             -f $SCRIPT_DIR/Dockerfile \
             "${build_args[@]}" \
+	    --pull=false \
             .
 else
     echo "Dockerfile does not exist!"

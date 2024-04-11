@@ -1,4 +1,16 @@
-# autofz
+> # autofz (built for ARM64)
+> This project builds autofz containers on Ubuntu Linux. This is based upon Ubuntu Linux Server 22.04.3 and was built in a UTM virtual machine on Mac OS 14.3. 
+>
+> The this project differs from the original autofz (https://github.com/sslab-gatech/autofz) in the following ways, in order to support the ARM64 runtime environment:
+> 1. Original AFL is not supported. While the fuzzer runs, it does not generate properly instrumented binaries in the ARM64 instruction set.
+> 2. Angora Fuzzer is not supported. This fuzzer is dependent upon tools that are specific to the i386/x86_64 instruction sets.
+> 3. QSym is not supported. This fuzzer is dependent upon tools that are specific to the i386/x86_64 instruction sets.
+> 4. This build requires a whopping 73 GB of storage. We'll be working to get this requirement down.
+> 5. To the best of my knowledge, the build otherwise works as expected. It is largely untested and intended only for research purposes.
+> 
+> ## What follows is the complete, unmodified README.md from the original project. Please consider and remember the points above when using it. 
+
+# autofz 
 [![Docker Pulls](https://img.shields.io/docker/pulls/fuyu0425/autofz)](https://hub.docker.com/r/fuyu0425/autofz) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7865366.svg)](https://doi.org/10.5281/zenodo.7865366)
 
 autofz is a meta fuzzer for automated fuzzer composition at runtime.
@@ -10,6 +22,8 @@ Some part of the source code might use `autofuzz` (which is the old name of `aut
 We provided the following for artifact evaluation:
 - A pre-built docker image which includes all baseline fuzzers and benchmarks used in the paper.
 - A VM that configures all necessary things and can be used to launch the docker containers. If you want to use the VM, please jump to [VM setup section](#vm-setup).
+
+
 
 ## Hardware dependencies
 During the evaluation, we use a cluster of Ubuntu 20.04 machines equipped with AMD Ryzen 9

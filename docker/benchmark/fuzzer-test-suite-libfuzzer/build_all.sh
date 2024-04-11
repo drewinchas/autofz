@@ -48,7 +48,7 @@ do
     {
         CC=clang
         CXX=clang++
-        LIBFUZZER_SRC=/fuzzer/libfuzzer/llvm-project/compiler-rt/lib/fuzzer/
+#        LIBFUZZER_SRC=/fuzzer/libfuzzer/llvm-project/compiler-rt/lib/fuzzer/
         FUZZING_ENGINE=fsanitize_fuzzer
         export CC CXX FUZZING_ENGINE LIBFUZZER_SRC
         BUILD_SCRIPT=$FTS_DIR/$target/build.sh

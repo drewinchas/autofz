@@ -93,7 +93,7 @@ do
 done
 wait
 
-cp -r $BUILD_DIR/openssl-1.0.1f/runtime /d/p/aflclangfast/fuzzer-test-suite/openssl-1.0.1f/
-cp -r $BUILD_DIR/openssl-1.0.1f/runtime /d/p/aflclangfastcmplog/fuzzer-test-suite/openssl-1.0.1f/
+#cp -r $BUILD_DIR/openssl-1.0.1f/runtime /d/p/aflclangfast/fuzzer-test-suite/openssl-1.0.1f/
+#cp -r $BUILD_DIR/openssl-1.0.1f/runtime /d/p/aflclangfastcmplog/fuzzer-test-suite/openssl-1.0.1f/
 
 ls -alh /d/p/*
