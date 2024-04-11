@@ -100,7 +100,7 @@ class AFLBase(PSFuzzer):
     @property
     def target(self):
         global FUZZER_CONFIG
-        target_root = FUZZER_CONFIG['afl']['target_root']
+        target_root = FUZZER_CONFIG['aflfast']['target_root']
         return os.path.join(target_root, self.group, self.program,
                             self.program)
 
