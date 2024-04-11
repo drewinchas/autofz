@@ -41,14 +41,15 @@ CONFIG: Dict = {
     # only specify basic things
     # how to launch fuzzers with proper arguments is handled by fuzzer driver
     'fuzzer': {
-        'afl': {
-            'input_dir': INPUT_DIR, # queue dir
-            'crash_dir': CRASH_DIR,
-            'skip_crash_file': ['README.txt'],
-            'command': '/fuzzer/afl/afl-fuzz', # fuzzer binary path
-            'target_root': '/d/p/justafl', # which binary is used to fuzz
-            'afl_based': True,
-        },
+        # AFL (traditional) is not supported in autofz_arm64
+        # 'afl': {
+        #    'input_dir': INPUT_DIR, # queue dir
+        #    'crash_dir': CRASH_DIR,
+        #    'skip_crash_file': ['README.txt'],
+        #    'command': '/fuzzer/afl/afl-fuzz', # fuzzer binary path
+        #    'target_root': '/d/p/justafl', # which binary is used to fuzz
+        #    'afl_based': True,
+        #},
         'aflfast': {
             'input_dir': INPUT_DIR,
             'crash_dir': CRASH_DIR,
@@ -81,15 +82,16 @@ CONFIG: Dict = {
             'target_root': '/d/p/justafl',
             'afl_based': True
         },
-        'qsym': {
-            'input_dir': INPUT_DIR,
-            'crash_dir': CRASH_DIR,
-            'skip_crash_file': ['README.txt'],
-            'afl_based': True,
-            'target_root': '/d/p/normal',  # for qsym
-            # afl_command # reuse base afl
-            'qsym_command': '/fuzzer/qsym/bin/run_qsym_afl.py'
-        },
+        # QSYM is not supported by autofz_arm64
+        # 'qsym': {
+        #    'input_dir': INPUT_DIR,
+        #    'crash_dir': CRASH_DIR,
+        #    'skip_crash_file': ['README.txt'],
+        #    'afl_based': True,
+        #    'target_root': '/d/p/normal',  # for qsym
+        #    # afl_command # reuse base afl
+        #    'qsym_command': '/fuzzer/qsym/bin/run_qsym_afl.py'
+        #},
         'lafintel': {
             'input_dir': INPUT_DIR,
             'crash_dir': CRASH_DIR,
@@ -116,15 +118,16 @@ CONFIG: Dict = {
             'aflpp_dir': '/fuzzer/afl++',
             'afl_based': True
         },
-        'angora': {
-            'input_dir': INPUT_DIR,
-            'crash_dir': CRASH_DIR,
-            'create_output_dir': False,
-            'target_root': '/d/p/angora/fast',
-            'target_root_taint': '/d/p/angora/taint',
-            'command': '/fuzzer/angora/angora_fuzzer',
-            'afl_based': False,
-        },
+        # Angora is not supported by autofz_arm64
+        # 'angora': {
+        #    'input_dir': INPUT_DIR,
+        #    'crash_dir': CRASH_DIR,
+        #    'create_output_dir': False,
+        #    'target_root': '/d/p/angora/fast',
+        #    'target_root_taint': '/d/p/angora/taint',
+        #    'command': '/fuzzer/angora/angora_fuzzer',
+        #    'afl_based': False,
+        #},
         'libfuzzer': {
             'input_dir': INPUT_DIR,
             'crash_dir': CRASH_DIR,
