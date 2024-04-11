@@ -613,6 +613,17 @@ def fuzzer_bitmap_diff(fuzzers, before_fuzzer_info, after_fuzzer_info):
         bitmap_diff[fuzzer] = after_bitmap[fuzzer] - before_global_bitmap
     return bitmap_diff
 
+# Added this for Unique Bugs metric support
+def fuzzer_ub_diff(fuzzers, before_fuzzer_info, after_fuzzer_info):
+    before_global_ub = before_fuzzer_info['global_unique_bugs']
+    after_ub = after_fuzzer_info['unique_bugs']
+    logger.debug(
+        f'after_ub is {after_ub} and before_global_ub is {before_global_ub}')
+    ub_diff = {}
+    for fuzzer in fuzzers:
+        ub_diff[fuzzer] = after_ub[fuzzer]['unique_bugs'] - before_global_ub['unique_bugs']
+    return ub_diff
+
 
 class SchedulingAlgorithm(metaclass=SingletonABCMeta):
     @abstractmethod
@@ -672,6 +683,9 @@ class Schedule_Base(SchedulingAlgorithm):
         self.diff_threshold = None
         self.diff_threshold_base = None
         self.diff_threshold_round = None
+
+        # Added for discrimination based on unique bugs
+        self.discriminator = None
 
     def find_new_bitmap(self):
         cov_before = self.cov_before_focus
@@ -735,24 +749,69 @@ class Schedule_Base(SchedulingAlgorithm):
 
     def has_winner(self) -> bool:
         assert self.diff_threshold is not None
+        assert self.discriminator is not None
+        logger.debug(f'has_winner invoked with {self.discriminator} as discriminator')
 
         ret = False
         current_fuzzer_info = get_fuzzer_info(self.fuzzers)
-        global_bitmap = current_fuzzer_info['global_bitmap'].count()
-        bitmap_diff = fuzzer_bitmap_diff(self.fuzzers,
-                                         self.before_prep_fuzzer_info,
-                                         current_fuzzer_info)
-        minv = 2**32
-        maxv = 0
-        for fuzzer in self.fuzzers:
-            minv = min(minv, bitmap_diff[fuzzer].count())
-            maxv = max(maxv, bitmap_diff[fuzzer].count())
-        diff = maxv - minv
-        # NOTE: threshold to determine whether we find a large difference
-        self.diff_round = diff
-        if diff > self.diff_threshold:
-            ret = True
-        logger.debug(f'has winner: {ret}, diff: {diff}, {bitmap_diff}')
+        if self.discriminator == 'bitmap':
+            global_bitmap = current_fuzzer_info['global_bitmap'].count()
+            bitmap_diff = fuzzer_bitmap_diff(self.fuzzers,
+                                             self.before_prep_fuzzer_info,
+                                             current_fuzzer_info)
+            minv = 2**32
+            maxv = 0
+            for fuzzer in self.fuzzers:
+                minv = min(minv, bitmap_diff[fuzzer].count())
+                maxv = max(maxv, bitmap_diff[fuzzer].count())
+            diff = maxv - minv
+            # NOTE: threshold to determine whether we find a large difference
+            self.diff_round = diff
+            if diff > self.diff_threshold:
+                ret = True
+            logger.debug(f'has BITMAP winner: {ret}, diff: {diff}, {bitmap_diff}')
+        elif self.discriminator == 'ub':
+            global_bitmap = current_fuzzer_info['global_bitmap'].count()
+            ub_diff = fuzzer_ub_diff(self.fuzzers,
+                                     self.before_prep_fuzzer_info,
+                                     current_fuzzer_info)
+            minv = 2**32
+            maxv = 0
+            for fuzzer in self.fuzzers:
+                logger.debug(f'ub_diff[{fuzzer}] is {ub_diff[fuzzer]}')
+                minv = min(minv, ub_diff[fuzzer])
+                maxv = max(maxv, ub_diff[fuzzer])
+            diff = maxv - minv
+            # NOTE: threshold to determine whether we find a large difference in unique bugs
+            # NOTE: For discrimination by unique bugs, we set this to 1
+            self.diff_threshold = 1
+            self.diff_round = diff
+            if diff > self.diff_threshold:
+                ret = True
+            logger.debug(f'has UNIQUE BUGS winner: {ret}, diff: {diff}, {ub_diff}')
+        # What to do if discriminator is Unique Bugs and THEN Bitmap
+        elif self.discriminator == 'ub-bitmap':
+            logger.debug(f'Checking for UNIQUE BUGS winner, then BITMAP winner.')
+            self.discriminator = 'ub'
+            logger.debug(f'Discriminator is now set to {self.discriminator}')
+            if Schedule_Base.has_winner(self):
+                ret = True
+                self.discriminator = 'ub-bitmap'
+            else:
+                self.discriminator = 'bitmap'
+                ret = Schedule_Base.has_winner(self)
+                self.discriminator = 'ub-bitmap'
+        # What to do if discriminator is Bitmap and THEN Unique Bugs
+        elif self.discriminator == 'bitmap-ub':
+            logger.debug(f'Checking for BITMAP winner, then UNIQUE BUGS winner.')
+            self.discriminator = 'bitmap'
+            if Schedule_Base.has_winner(self):
+                ret = True
+                self.discriminator = 'bitmap-ub'
+            else:
+                self.discriminator = 'ub'
+                ret = Schedule_Base.has_winner(self)
+                self.discriminator = 'bitmap-ub'
         return ret
 
     def prep_round_robin(self) -> bool:
@@ -1112,10 +1171,13 @@ class Schedule_Autofz(Schedule_Base):
                  fuzzers,
                  prep_time=300,
                  focus_time=300,
-                 diff_threshold=10):
+                 diff_threshold=10,
+                 # Added for alternate discriminator support (ub or bitmap)
+                 discriminator='bitmap'):
         '''
         prep_time: total time for prep phase + focus phase
         diff_threshold: bitmap diff to determine whether there is a clear winner
+        discriminator: selection of bitmap diff or unique bugs as metric for winner determination
         if we find a winner in the prep phase, we use the remaining time for focus phase
         '''
         # focus time is dynamically determined
@@ -1132,6 +1194,9 @@ class Schedule_Autofz(Schedule_Base):
         self.diff_threshold = diff_threshold
         self.diff_threshold_base = diff_threshold
         self.diff_threshold_round = diff_threshold
+
+        # Added to select discriminator
+        self.discriminator = discriminator
 
         self.diff_round = 0
         self.has_winner_round = False
@@ -1511,10 +1576,12 @@ def main():
     # autofz mode
     else:
         diff_threshold = ARGS.diff_threshold
+        discriminator = ARGS.discriminator
         scheduler = Schedule_Autofz(fuzzers=FUZZERS,
                                       prep_time=PREP_TIME,
                                       focus_time=FOCUS_TIME,
-                                      diff_threshold=diff_threshold)
+                                      diff_threshold=diff_threshold,
+                                      discriminator=discriminator)
         algorithm = 'autofz'
 
     assert scheduler

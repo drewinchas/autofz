@@ -34,6 +34,7 @@ class ArgsParser(Tap):
     diff_threshold: int
     parallel: bool
     tar: bool
+    discriminator: str
 
     def configure(self):
         global config
@@ -113,3 +114,8 @@ class ArgsParser(Tap):
                           action="store_true",
                           default=False,
                           help="tar fuzzer/eval directories")
+        self.add_argument("--discriminator",
+                          type=str,
+                          choices=['bitmap', 'ub', 'bitmap-ub', 'ub-bitmap'],
+                          default='bitmap',
+                          help="metric to use to discriminate between fuzzers")
