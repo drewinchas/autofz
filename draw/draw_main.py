@@ -288,15 +288,24 @@ def draw_overview():
         #overall setting
         #print(algo_order)
         # print(PALETTE)
+        if ARGS.square:
+            fg_height=3
+            fg_aspect=1
+            fg_col_wrap=1
+        else:
+            fg_height=1.5
+            fg_aspect=2
+            fg_col_wrap=4
+
         g = sns.FacetGrid(
             df,
             col='target',
             hue='Selected Fuzzer',
             sharey=False,
-            col_wrap=4,  # NOTE: change based on the total number
+            col_wrap=fg_col_wrap,  # NOTE: change based on the total number
             # col_wrap=3,
-            height=1.5,
-            aspect=2,
+            height=fg_height,
+            aspect=fg_aspect,
             # hue_order=algo_order,
             palette=PALETTE)
 
@@ -335,6 +344,7 @@ def draw_overview():
             lw = 3 if algo in AUTOFZ_NAMES else 1.2
             l = Line2D([0], [0], color=PALETTE[algo], label=algo, lw=lw)
             legend_handles.append(l)
+        
 
         g.figure.legend(handles=legend_handles,
                         bbox_to_anchor=(1.0, 0.25),
@@ -582,6 +592,11 @@ def parse_args():
         action="store_true",
         default=False,
         help="Draw collab fuzzing (figure 7), default is drawing figure 3.")
+    p.add_argument(
+        "--square",
+        action="store_true",
+        default=False,
+        help="Draw Square plot (helpful for results of single fuzzing campaign)")
 
     return p.parse_args()
 
