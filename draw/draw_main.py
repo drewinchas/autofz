@@ -28,7 +28,8 @@ from matplotlib.lines import Line2D
 
 from draw.draw_utils import (get_info_from_log, get_jobs_from_log,
                              get_name_from_log, get_target_from_log,
-                             get_timeout_from_log, parse_log)
+                             get_timeout_from_log, parse_log,
+                             get_autofz_args)
 
 # sns.set(font_scale=1.5, rc={'text.usetex' : True})
 rc('font', **{
@@ -95,6 +96,7 @@ AUTOFZ_NAMES = [
     'autofz',
     'autofz-10',
     'autofz-6',
+    'autofz+ub',
     SYS,
 ]
 
@@ -207,6 +209,18 @@ def pick_algo_figure3():
     name = f'autofz'
     NAME_MAP[name] = 'autofz'
     CHOSEN_MULTI.append(name)
+    name = f'autofz+ub'
+    NAME_MAP[name] = 'autofz+ub'
+    CHOSEN_MULTI.append(name)
+    name = f'autofz+bitmap'
+    NAME_MAP[name] = 'autofz+bitmap'
+    CHOSEN_MULTI.append(name)
+    name = f'autofz+ub-bitmap'
+    NAME_MAP[name] = 'autofz+ub-bitmap'
+    CHOSEN_MULTI.append(name)
+    name = f'autofz+bitmap-ub'
+    NAME_MAP[name] = 'autofz+bitmap-ub'
+    CHOSEN_MULTI.append(name)
     CHOSEN_MULTI.extend(INDIVIDUAL_FUZZER)
 
 
@@ -287,7 +301,7 @@ def draw_overview():
         df.rename(columns={'algo': 'Selected Fuzzer'}, inplace=True)
         #overall setting
         #print(algo_order)
-        # print(PALETTE)
+        print(PALETTE)
         if ARGS.square:
             fg_height=3
             fg_aspect=1
@@ -400,13 +414,13 @@ def draw_overview():
                     count += 1
                     if y is None:
                         continue
-                    data.append([algo, x, y, target, individual, autofz])
+                    data.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), x, y, target, individual, autofz])
                     maxx = max(maxx, x)
                     minxx = min(minxx, x)
                     maxy = max(maxy, y)
                     minyy = min(minyy, y)
                 minyy_last = min(minyy_last, last)
-                data_last.append([algo, last, target])
+                data_last.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), last, target])
 
     algorithms = list(set(algorithms))
     df = pd.DataFrame(
