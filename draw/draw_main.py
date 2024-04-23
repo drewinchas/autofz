@@ -414,13 +414,19 @@ def draw_overview():
                     count += 1
                     if y is None:
                         continue
-                    data.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), x, y, target, individual, autofz])
+                    if get_autofz_args(log).get('discriminator', None) == None:
+                        data.append([algo, x, y, target, individual, autofz])
+                    else:
+                        data.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), x, y, target, individual, autofz])
                     maxx = max(maxx, x)
                     minxx = min(minxx, x)
                     maxy = max(maxy, y)
                     minyy = min(minyy, y)
                 minyy_last = min(minyy_last, last)
-                data_last.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), last, target])
+                if get_autofz_args(log).get('discriminator', None) == None:
+                    data_last.append([algo, last, target])
+                else:
+                    data_last.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), last, target])
 
     algorithms = list(set(algorithms))
     df = pd.DataFrame(
