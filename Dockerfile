@@ -3,7 +3,7 @@ FROM fuzzer_base/aflfast as aflfast
 #FROM fuzzer_base/angora as angora
 FROM fuzzer_base/fairfuzz as fairfuzz
 FROM fuzzer_base/lafintel as lafintel
-FROM fuzzer_base/learnafl as learnafl
+#FROM fuzzer_base/learnafl as learnafl
 FROM fuzzer_base/libfuzzer as libfuzzer
 FROM fuzzer_base/mopt as mopt
 FROM fuzzer_base/radamsa as radamsa
@@ -95,7 +95,7 @@ COPY --chown=$UID:$GID --from=aflfast /fuzzer /fuzzer
 #COPY --chown=$UID:$GID --from=angora /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=fairfuzz /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=lafintel /fuzzer /fuzzer
-COPY --chown=$UID:$GID --from=learnafl /fuzzer /fuzzer
+#COPY --chown=$UID:$GID --from=learnafl /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=libfuzzer /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=mopt /fuzzer /fuzzer
 COPY --chown=$UID:$GID --from=radamsa /fuzzer /fuzzer

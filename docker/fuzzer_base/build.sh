@@ -13,7 +13,7 @@ fuzzer_list=(
     lafintel
     radamsa
     libfuzzer
-    learnafl
+#   learnafl
     redqueen
 )
 

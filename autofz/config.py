@@ -42,14 +42,14 @@ CONFIG: Dict = {
     # how to launch fuzzers with proper arguments is handled by fuzzer driver
     'fuzzer': {
         # AFL (traditional) is not supported in autofz_arm64
-        # 'afl': {
-        #    'input_dir': INPUT_DIR, # queue dir
-        #    'crash_dir': CRASH_DIR,
-        #    'skip_crash_file': ['README.txt'],
-        #    'command': '/fuzzer/afl/afl-fuzz', # fuzzer binary path
-        #    'target_root': '/d/p/justafl', # which binary is used to fuzz
-        #    'afl_based': True,
-        #},
+        'afl': {
+            'input_dir': INPUT_DIR, # queue dir
+            'crash_dir': CRASH_DIR,
+            'skip_crash_file': ['README.txt'],
+            'command': '/fuzzer/afl/afl-fuzz', # fuzzer binary path
+            'target_root': '/d/p/justafl', # which binary is used to fuzz
+            'afl_based': True,
+        },
         'aflfast': {
             'input_dir': INPUT_DIR,
             'crash_dir': CRASH_DIR,
@@ -74,14 +74,15 @@ CONFIG: Dict = {
             'target_root': '/d/p/justafl',
             'afl_based': True,
         },
-        'learnafl': {
-            'input_dir': INPUT_DIR,
-            'crash_dir': CRASH_DIR,
-            'skip_crash_file': ['README.txt'],
-            'command': '/fuzzer/LearnAFL/afl-fuzz',
-            'target_root': '/d/p/justafl',
-            'afl_based': True
-        },
+        # LearnAFL is not supported by autofz_arm64... not sure why.
+        # 'learnafl': {
+        #     'input_dir': INPUT_DIR,
+        #     'crash_dir': CRASH_DIR,
+        #     'skip_crash_file': ['README.txt'],
+        #     'command': '/fuzzer/LearnAFL/afl-fuzz',
+        #     'target_root': '/d/p/justafl',
+        #     'afl_based': True
+        # },
         # QSYM is not supported by autofz_arm64
         # 'qsym': {
         #    'input_dir': INPUT_DIR,

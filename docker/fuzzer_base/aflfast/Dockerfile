@@ -1,11 +1,15 @@
 ARG PREFIX
-FROM $PREFIX/base
+FROM $PREFIX/afl
 
 WORKDIR /fuzzer
 
+ENV AFL_NO_X86=1 \
+    CC=afl-clang-fast \
+    CXX=afl-clang-fast++
+
 RUN git clone https://github.com/mboehme/aflfast && \
     cd aflfast && \
-    AFL_NO_X86=1 make && AFL_NO_X86=1 make install
+    make && make install
 
-ENV CC=afl-gcc \
-    CXX=afl-g++
+ENV CC=afl-clang-fast \
+    CXX=afl-clang-fast++

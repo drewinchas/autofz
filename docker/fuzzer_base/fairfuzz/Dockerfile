@@ -1,14 +1,13 @@
 ARG PREFIX
-FROM $PREFIX/base
+FROM $PREFIX/afl
 
 WORKDIR /fuzzer
 
-ENV AFL_NO_X86=1
+ENV AFL_NO_X86=1 \
+    CC=afl-clang-fast \
+    CXX=afl-clang-fast++
 
 RUN git clone https://github.com/carolemieux/afl-rb.git && \
-  cd afl-rb && \
+    cd afl-rb && \
 #  git checkout e529c1f1b366 && \
-  make -j && make install
-
-ENV CC=afl-gcc \
-    CXX=afl-g++
+    make && make install 
