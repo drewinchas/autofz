@@ -117,7 +117,7 @@ COPY --chown=$UID:$GID --from=autofz_bench/coverage:latest /d /d
 COPY --chown=$UID:$GID --from=autofz_bench/coverage:latest /autofz_bench /autofz_bench
 
 USER root
-RUN cp /fuzzer/LearnAFL/learning_engine.py /usr/local/bin
+#RUN cp /fuzzer/LearnAFL/learning_engine.py /usr/local/bin
 
 # Reset to normal compilers
 ENV CC="gcc" CXX="g++"
