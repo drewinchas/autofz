@@ -1,3 +1,12 @@
+> # autofz (With Unique Bugs as Discriminator)
+> 
+> The this project differs from the original autofz (https://github.com/sslab-gatech/autofz) in the following ways, in order to implement the use of Unique Bugs (ub) as the descriminating metric when choosing winner in focus phase.
+> 1. Autofz has been modified to accept a new command line option, --discriminator. It accepts one of four arguments to select the discriminator(s) that will be used to pick the winning fuzzer: bitmap (default, original metric), ub (unique bugs), ub-bitmap (unique bugs; if no winner then bitmap), bitmap-ub (bitmap, if no winner then unique bugs).
+> 2. Autofz-draw has been modified to recognize and identify the use of these new discriminators.
+> 3. To the best of our knowledge, no further changes from the original Autofz are present in this repository. We have another branch, "arm64," which is a reconfigured repo for building Autofz on ARM64 hosts.
+> 
+> ## What follows is the complete, unmodified README.md from the original project. Please consider and remember the points above when using it. 
+
 # autofz
 [![Docker Pulls](https://img.shields.io/docker/pulls/fuyu0425/autofz)](https://hub.docker.com/r/fuyu0425/autofz) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7865366.svg)](https://doi.org/10.5281/zenodo.7865366)
 
