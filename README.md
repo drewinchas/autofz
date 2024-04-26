@@ -2,7 +2,7 @@
 > This project builds autofz containers on Ubuntu Linux. This is based upon Ubuntu Linux Server 22.04.3 and was built in a UTM virtual machine on Mac OS 14.3. 
 >
 > The this project differs from the original autofz (https://github.com/sslab-gatech/autofz) in the following ways, in order to support the ARM64 runtime environment:
-> 1. Original AFL is not supported. While the fuzzer runs, it does not generate properly instrumented binaries in the ARM64 instruction set.
+> 1. LearnAFL is not supported. While the fuzzer compiles, it does not generate properly instrumented binaries in the ARM64 instruction set.
 > 2. Angora Fuzzer is not supported. This fuzzer is dependent upon tools that are specific to the i386/x86_64 instruction sets.
 > 3. QSym is not supported. This fuzzer is dependent upon tools that are specific to the i386/x86_64 instruction sets.
 > 4. This build requires a whopping 73 GB of storage. We'll be working to get this requirement down.
