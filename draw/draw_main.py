@@ -415,7 +415,7 @@ def draw_overview():
                     if y is None:
                         continue
                     if get_autofz_args(log).get('discriminator', None) == None:
-                        data.append([algo, x, y, target, individual, autofz])
+                        data.append([algo+str('+bitmap'), x, y, target, individual, autofz])
                     else:
                         data.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), x, y, target, individual, autofz])
                     maxx = max(maxx, x)
@@ -424,7 +424,7 @@ def draw_overview():
                     minyy = min(minyy, y)
                 minyy_last = min(minyy_last, last)
                 if get_autofz_args(log).get('discriminator', None) == None:
-                    data_last.append([algo, last, target])
+                    data_last.append([algo+str('+bitmap'), last, target])
                 else:
                     data_last.append([algo+str('+'+get_autofz_args(log).get('discriminator', None)), last, target])
 
